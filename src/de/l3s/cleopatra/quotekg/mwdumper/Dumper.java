@@ -17,7 +17,7 @@ import org.mediawiki.importer.MultiWriter;
 import org.mediawiki.importer.XmlDumpReader;
 
 import de.l3s.cleopatra.quotekg.data.DataStorage;
-import de.l3s.cleopatra.quotekg.data.JSONWriter;
+import de.l3s.cleopatra.quotekg.data.WikiquoteToJSONWriter;
 import de.l3s.cleopatra.quotekg.links.WikidataMapping;
 import de.l3s.cleopatra.quotekg.model.Language;
 import mwdumper.articleprocessing.WikiquoteExtractor;
@@ -88,7 +88,7 @@ class Dumper {
 	private static void writeOutput(WikiquoteExtractor sink, String typesFileName, String idsFileName,
 			String outputFileName, Language language) {
 		System.out.println("Write output. Number of articles: " + sink.getDataStorage().getArticles().size());
-		JSONWriter.writeJSONs(sink.getDataStorage(), outputFileName, typesFileName, idsFileName, language);
+		WikiquoteToJSONWriter.writeJSONs(sink.getDataStorage(), outputFileName, typesFileName, idsFileName, language);
 	}
 
 	static InputStream openStandardInput() throws IOException {

@@ -13,7 +13,7 @@ import org.apache.commons.io.FileUtils;
 import org.apache.commons.text.StringEscapeUtils;
 
 import de.l3s.cleopatra.quotekg.data.DataStorage;
-import de.l3s.cleopatra.quotekg.data.JSONWriter;
+import de.l3s.cleopatra.quotekg.data.WikiquoteToJSONWriter;
 import de.l3s.cleopatra.quotekg.model.Footnote;
 import de.l3s.cleopatra.quotekg.model.Language;
 import info.bliki.wiki.filter.PlainTextConverter;
@@ -36,16 +36,17 @@ public class TextExtractor {
 
 	public static void main(String[] args) throws IOException {
 
-		String entity = "Andy Warhol";
-		Language language = Language.getLanguage("da");
-		String outputFolder = "/home/simon/Documents/QuoteKG/output/";
-		String dataFolder = "/home/simon/Documents/QuoteKG/data/";
+		String entity = args[0]; // e.g., "Andy Warhol";
+		Language language = Language.getLanguage(args[1]); // e.g., "da" for Danish
+		String dataFolder = args[2]; // path to the input files
+		String examplesFolder = args[3]; // path to the input files
+		String outputFolder = args[4]; // path to the output files
 
 		String fileName = entity.toLowerCase().replace(" ", "_") + "_" + language.getLanguage();
 
-		Article article = new Article("Andy Warhol", 123, 456);
+		Article article = new Article(entity, 123, 456); // dummy IDs
 		article.setText(FileUtils
-				.readFileToString(new File("/home/simon/Documents/QuoteKG/examples/" + fileName + ".txt"), "UTF-8"));
+				.readFileToString(new File(examplesFolder + fileName + ".txt"), "UTF-8"));
 		TextExtractor te = new TextExtractor(article, 1);
 		te.setExample(entity);
 		te.extractQuotes();
@@ -53,7 +54,7 @@ public class TextExtractor {
 		DataStorage dataStorage = new DataStorage();
 		dataStorage.getArticles().add(article);
 
-		JSONWriter.writeJSONs(dataStorage, outputFolder + fileName + ".json", dataFolder + "types.ttl",
+		WikiquoteToJSONWriter.writeJSONs(dataStorage, outputFolder + fileName + ".json", dataFolder + "types.ttl",
 				dataFolder + "/" + language.getLanguage() + "/ids.ttl", language);
 	}
 
