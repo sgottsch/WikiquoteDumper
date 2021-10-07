@@ -1,12 +1,17 @@
-#languages="en it pl ru cs fa de pt es fr uk he sk bs tr ca fi az sl lt eo zh et bg ar hr hy el su nn id sv li hu ko nl ja la ta sah sr simple gu gl th ur te be cy no ml sq kn ro ku eu uz hi ka da vi sa is"
-languages="is sa vi da ka hi uz eu ku ro kn sq ml no cy be te ur th gl gu simple sr sah ta la ja nl ko hu li sv id nn su el hy hr ar bg et zh eo lt sl az fi ca tr bs sk he uk fr es pt de fa cs ru pl it en"
+#!/bin/bash
+
+reverse() {
+  tac <(echo "$@" | tr ' ' '\n') | tr '\n' ' '
+}
+
+languages="it en pl ru cs fa de et pt fr uk es he sk tr bs ca eo fi az sl lt zh ar bg hy hr el su nn id sv li hu ko nl ja la ta sah sr gu gl ur te be cy no ml sq vi kn ro eu ku uz hi th ka da sa is"
 
 path = "/home/...../"
 
 mkdir jsons
 mkdir logs
 
-for language in $languages; do
+for language in `reverse $languages`; do
     echo ${language}
     nohup java -Xmx8G -jar WikiquoteDumper.jar ${language} ${path}/data ${path}/jsons 16 > logs/nohup_${language}.out
 done
