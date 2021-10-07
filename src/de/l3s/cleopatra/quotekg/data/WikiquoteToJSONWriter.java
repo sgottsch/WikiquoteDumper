@@ -42,6 +42,8 @@ public class WikiquoteToJSONWriter {
 
 		PrintWriter writer = null;
 		try {
+			System.out.println("Create file " + outputFileName + ".");
+
 			writer = new PrintWriter(outputFileName);
 			for (Article article : dataStorage.getArticles()) {
 				// ignore Wikiquote main page (e.g., https://hr.wikiquote.org)
@@ -63,10 +65,9 @@ public class WikiquoteToJSONWriter {
 
 	private static void updateArticleLinkIds(Article article, DataStorage dataStorage, Language language,
 			WikidataWikipediaIDMap wikipediaWikidataIDMap) {
-		System.out.println("updateArticleLinkIds");
 
 		for (Link link : article.getLinks()) {
-			
+
 			link.setArticle(dataStorage.getArticlesByWikiquoteId().get(link.getText()));
 
 			if (link.getArticle() == null && link.getPrefix() != null && link.getPrefix().equals("w")) {

@@ -24,7 +24,7 @@ import de.l3s.cleopatra.quotekg.model.Language;
 import de.l3s.cleopatra.quotekg.util.StopTitlesLoader;
 import mwdumper.articleprocessing.WikiquoteExtractor;
 
-class Dumper {
+class WikiquoteDumper {
 
 	private static final int IN_BUF_SZ = 1024 * 1024;
 
@@ -85,8 +85,8 @@ class Dumper {
 		XmlDumpReader reader = new XmlDumpReader(input, outputSink);
 		reader.readDump();
 
-		writeOutput(sink, dataFolder + "types.ttl", dataFolder + language.getLanguage() + "/ids.ttl",
-				outputFolder + "results_" + language.getLanguage() + ".json", language);
+		writeOutput(sink, dataFolder + "types.ttl", dataFolder + language.getLanguageLowerCase() + "/ids.ttl",
+				outputFolder + "results_" + language.getLanguageLowerCase() + ".json", language);
 	}
 
 	private static void writeOutput(WikiquoteExtractor sink, String typesFileName, String idsFileName,

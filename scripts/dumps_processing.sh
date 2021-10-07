@@ -6,7 +6,7 @@ reverse() {
 
 languages="it en pl ru cs fa de et pt fr uk es he sk tr bs ca eo fi az sl lt zh ar bg hy hr el su nn id sv li hu ko nl ja la ta sah sr gu gl ur te be cy no ml sq vi kn ro eu ku uz hi th ka da sa is"
 
-path = "/home/...../"
+path="/home/USER/quotekg/"
 
 mkdir jsons
 mkdir logs

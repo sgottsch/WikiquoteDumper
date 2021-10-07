@@ -84,8 +84,6 @@ public class WikiquoteExtractor implements DumpWriter {
 
 			if (this._targetPageIds != null && !this._targetPageIds.contains(this._pageId))
 				return;
-			else
-				System.out.println("EXAMPLE FOUND");
 
 			System.out.println(this.pageTitle + " -> " + wikidataId + " (" + this._pageId + ")");
 

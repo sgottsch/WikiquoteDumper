@@ -13,13 +13,15 @@ import de.l3s.cleopatra.quotekg.model.Language;
 public class StopTitlesLoader {
 
 	public static Set<String> getStopTitles(Language language) {
+
+		System.out.println(language);
 		Set<String> stopTitles = new HashSet<String>();
 
 		try {
 			for (String line : getResourceFileAsString("stop_titles.txt").split("\n")) {
 				String[] parts = line.split("\t");
 				if (parts.length > 1) {
-					if (language == Language.getLanguage(parts[0].toUpperCase())) {
+					if (language.getLanguageLowerCase().equals(parts[0].toLowerCase())) {
 						for (int i = 1; i < parts.length; i++)
 							stopTitles.add(parts[i]);
 					}
