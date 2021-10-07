@@ -64,10 +64,9 @@ public class WikiquoteToJSONWriter {
 	private static void updateArticleLinkIds(Article article, DataStorage dataStorage, Language language,
 			WikidataWikipediaIDMap wikipediaWikidataIDMap) {
 		System.out.println("updateArticleLinkIds");
+
 		for (Link link : article.getLinks()) {
 			
-			System.out.println("LINK: "+link.getAnchorText()+"/"+link.getText());
-
 			link.setArticle(dataStorage.getArticlesByWikiquoteId().get(link.getText()));
 
 			if (link.getArticle() == null && link.getPrefix() != null && link.getPrefix().equals("w")) {

@@ -10,6 +10,7 @@ import java.sql.Connection;
 import java.text.ParseException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 import org.mediawiki.dumper.ProgressFilter;
 import org.mediawiki.importer.DumpWriter;
@@ -20,6 +21,7 @@ import de.l3s.cleopatra.quotekg.data.DataStorage;
 import de.l3s.cleopatra.quotekg.data.WikiquoteToJSONWriter;
 import de.l3s.cleopatra.quotekg.links.WikidataMapping;
 import de.l3s.cleopatra.quotekg.model.Language;
+import de.l3s.cleopatra.quotekg.util.StopTitlesLoader;
 import mwdumper.articleprocessing.WikiquoteExtractor;
 
 class Dumper {
@@ -68,7 +70,9 @@ class Dumper {
 		DataStorage dataStorage = new DataStorage();
 		dataStorage.loadPersonWikidataIDs(dataFolder + "persons.csv");
 
-		WikiquoteExtractor sink = getWikiquoteExtractor(wikidataMapping, dataStorage, numberOfThreads);
+		Set<String> stopTitles = StopTitlesLoader.getStopTitles(language);
+
+		WikiquoteExtractor sink = getWikiquoteExtractor(wikidataMapping, dataStorage, numberOfThreads, stopTitles);
 		InputStream input = new FileInputStream(new File(fileName));
 		// openStandardInput();
 
@@ -118,8 +122,8 @@ class Dumper {
 	}
 
 	private static WikiquoteExtractor getWikiquoteExtractor(WikidataMapping wikidataMapping, DataStorage dataStorage,
-			int numberOfThreads) {
-		return new WikiquoteExtractor(wikidataMapping, dataStorage, numberOfThreads);
+			int numberOfThreads, Set<String> stopTitles) {
+		return new WikiquoteExtractor(wikidataMapping, dataStorage, numberOfThreads, stopTitles);
 	}
 
 }

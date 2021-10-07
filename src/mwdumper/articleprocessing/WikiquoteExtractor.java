@@ -3,8 +3,8 @@ package mwdumper.articleprocessing;
 import java.io.IOException;
 import java.text.DateFormat;
 import java.text.SimpleDateFormat;
-import java.util.Arrays;
 import java.util.List;
+import java.util.Set;
 
 import org.mediawiki.importer.DumpWriter;
 import org.mediawiki.importer.Page;
@@ -18,7 +18,7 @@ import de.l3s.cleopatra.quotekg.links.WikidataMapping;
 public class WikiquoteExtractor implements DumpWriter {
 
 	String pageTitle = "";
-	List<Integer> _targetPageIds = null; //Arrays.asList(10585, 34965);
+	List<Integer> _targetPageIds = null; // Arrays.asList(10585, 34965);
 	int _pageId;
 	boolean debug = false;
 	String _page = "";
@@ -29,16 +29,19 @@ public class WikiquoteExtractor implements DumpWriter {
 
 	private WikidataMapping wikidataMapping;
 	private DataStorage dataStorage;
+	private Set<String> stopTitles;
 
 	protected static final DateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd_HH:mm:ss.S");
 
 	public void close() throws IOException {
 	}
 
-	public WikiquoteExtractor(WikidataMapping wikidataMapping, DataStorage dataStorage, int numberOfThreads) {
+	public WikiquoteExtractor(WikidataMapping wikidataMapping, DataStorage dataStorage, int numberOfThreads,
+			Set<String> stopTitles) {
 		this.wikidataMapping = wikidataMapping;
 		this.dataStorage = dataStorage;
 		this.numberOfThreads = numberOfThreads;
+		this.stopTitles = stopTitles;
 	}
 
 	public void writeStartWiki(Wikiinfo info) throws IOException {
@@ -93,7 +96,7 @@ public class WikiquoteExtractor implements DumpWriter {
 			if (wikidataId != null)
 				this.dataStorage.getArticlesByWikidataId().put(wikidataId, article);
 
-			TextExtractor extractor = new TextExtractor(article, numberOfThreads);
+			TextExtractor extractor = new TextExtractor(article, numberOfThreads, this.stopTitles);
 
 			try {
 				extractor.extractQuotes();

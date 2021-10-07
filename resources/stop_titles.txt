@@ -1,0 +1,19 @@
+it	Note	Bibliografia	Voci correlate	Altri progetti
+en	External links	See also
+da	Eksterne henvisninger
+de	Weblinks
+es	Referencias
+ru	Источники	литература	Ссылки
+pt	Referências
+ca	Referències	Enllaços externs
+no	Referanser	Eksterne lenker
+fa	پیوند به بیرون	منابع
+tr	Kaynakça
+cs	Reference	Externí odkazy
+hu	Források
+hr	Izvori
+eo	Referencoj
+ja	脚注
+zh	参见	参考文献
+et	Välislingid
+sk	Iné projekty

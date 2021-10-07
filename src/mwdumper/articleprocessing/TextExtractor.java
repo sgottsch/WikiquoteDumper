@@ -6,16 +6,19 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Set;
 import java.util.concurrent.CompletableFuture;
 import java.util.concurrent.ExecutionException;
 
 import org.apache.commons.io.FileUtils;
+import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.text.StringEscapeUtils;
 
 import de.l3s.cleopatra.quotekg.data.DataStorage;
 import de.l3s.cleopatra.quotekg.data.WikiquoteToJSONWriter;
 import de.l3s.cleopatra.quotekg.model.Footnote;
 import de.l3s.cleopatra.quotekg.model.Language;
+import de.l3s.cleopatra.quotekg.util.StopTitlesLoader;
 import info.bliki.wiki.filter.PlainTextConverter;
 import info.bliki.wiki.model.Configuration;
 import info.bliki.wiki.model.Reference;
@@ -31,6 +34,7 @@ public class TextExtractor {
 
 	private boolean printExampleEntity = false;
 	private String exampleEntity = null;
+	private Set<String> stopTitles;
 
 	private int numberOfThreads;
 
@@ -45,9 +49,8 @@ public class TextExtractor {
 		String fileName = entity.toLowerCase().replace(" ", "_") + "_" + language.getLanguage();
 
 		Article article = new Article(entity, 123, 456); // dummy IDs
-		article.setText(FileUtils
-				.readFileToString(new File(examplesFolder + fileName + ".txt"), "UTF-8"));
-		TextExtractor te = new TextExtractor(article, 1);
+		article.setText(FileUtils.readFileToString(new File(examplesFolder + fileName + ".txt"), "UTF-8"));
+		TextExtractor te = new TextExtractor(article, 1, StopTitlesLoader.getStopTitles(language));
 		te.setExample(entity);
 		te.extractQuotes();
 
@@ -63,10 +66,11 @@ public class TextExtractor {
 		this.printExampleEntity = true;
 	}
 
-	public TextExtractor(Article article, int numberOfThreads) {
+	public TextExtractor(Article article, int numberOfThreads, Set<String> stopTitles) {
 		article.setText(StringEscapeUtils.unescapeHtml4(article.getText()));
 		this.article = article;
 		this.numberOfThreads = numberOfThreads;
+		this.stopTitles = stopTitles;
 	}
 
 	public void extractQuotes() {
@@ -100,6 +104,14 @@ public class TextExtractor {
 
 		Integer lastSectionLevel = null;
 		for (Line line : lines) {
+
+			String rawTextTitle = line.getRawText().strip();
+			if (rawTextTitle.startsWith("==") && rawTextTitle.endsWith("==")) {
+				rawTextTitle = StringUtils.strip(rawTextTitle, "=");
+				if (stopTitles.contains(rawTextTitle)) {
+					break;
+				}
+			}
 
 			// Italian Wikiquote has an attribute to assign chronological quotes
 			if (currentSection != null && line.getRawText().equals("{{cronologico}}"))
@@ -179,7 +191,7 @@ public class TextExtractor {
 				currentTemplate.addText(line.getRawText());
 				currentSection.addTemplate(currentTemplate);
 			} else {
-
+				hasQuotes = true;
 				if (line.getRawText().startsWith("**") || line.getRawText().startsWith(":*")
 						|| line.getRawText().startsWith(":")) {
 
@@ -188,7 +200,6 @@ public class TextExtractor {
 					else
 						parseWikiText(line);
 
-					hasQuotes = true;
 					if (currentLine == null)
 						continue;
 
