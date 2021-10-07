@@ -15,7 +15,7 @@ import mwdumper.model.Link;
 import mwdumper.model.Section;
 import mwdumper.model.Template;
 
-public class JSONWriter {
+public class WikiquoteToJSONWriter {
 
 	public static void writeJSONs(DataStorage dataStorage, String outputFileName, String typesFileName,
 			String idsFileName, Language language) {
