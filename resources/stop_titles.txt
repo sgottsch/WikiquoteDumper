@@ -17,3 +17,4 @@ ja	脚注
 zh	参见	参考文献
 et	Välislingid
 sk	Iné projekty
+uk	Посилання Примітки Джерела
