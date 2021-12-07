@@ -1,4 +1,4 @@
-it	Note	Bibliografia	Voci correlate	Altri progetti
+it	Note	Bibliografia	Voci correlate	Altri progetti  Doppiaggio
 en	External links	See also
 da	Eksterne henvisninger
 de	Weblinks
@@ -17,4 +17,4 @@ ja	脚注
 zh	参见	参考文献
 et	Välislingid
 sk	Iné projekty
-hix	बाहरी कडियाँ
+uk	Посилання Примітки  Джерела
