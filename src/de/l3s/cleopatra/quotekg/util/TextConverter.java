@@ -1,3 +1,4 @@
+package de.l3s.cleopatra.quotekg.util;
 import java.util.LinkedList;
 import java.util.regex.Pattern;
 

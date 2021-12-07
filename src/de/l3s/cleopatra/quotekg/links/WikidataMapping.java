@@ -24,7 +24,7 @@ public class WikidataMapping {
 	public void loadWikidataMapping(String basePath) {
 
 		LineIterator it = null;
-		
+
 		try {
 			it = FileUtils.lineIterator(new File(basePath + language.getLanguage() + "/wikidata.sql"), "UTF-8");
 			while (it.hasNext()) {
@@ -57,6 +57,10 @@ public class WikidataMapping {
 
 	public Integer getWikidataId(int pageId) {
 		return this.wikiquotePageIdToWikidataId.get(pageId);
+	}
+
+	public Map<Integer, Integer> getWikiquotePageIdToWikidataId() {
+		return wikiquotePageIdToWikidataId;
 	}
 
 }

@@ -43,7 +43,9 @@ for language in $languages; do
 			grep " ${language} " ids.ttl > "${language}/ids.ttl"
 			sed -i "s/ ${language} / /g" "${language}/ids.ttl"		
 	fi;
-   
+
+    grep -A 2 '<title>' data/${language}/pages.xml | grep -v '<ns>' | tr --delete '\n'  > data/${language}/wikiquote_titles.tsv
+    sed -i 's/<\/title>    <id>/\t/g;s/<\/id>--    <title>/\n/g;s/<\/id>//g;s/    <title>//g' data/${language}/wikiquote_titles.tsv
 done
 
 wget --no-check-certificate -O "types.ttl.bz2" "https://downloads.dbpedia.org/repo/dbpedia/wikidata/instance-types/${datedbpedia1}/instance-types_specific.ttl.bz2"

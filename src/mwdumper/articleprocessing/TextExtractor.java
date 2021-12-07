@@ -77,7 +77,7 @@ public class TextExtractor {
 
 		List<Line> lines = new ArrayList<Line>();
 		for (String line : article.getText().split("\n"))
-			lines.add(new Line(line));
+			lines.add(new Line(line.replace("PAGENAME", this.article.getWikiquoteId())));
 
 		identifySections(lines);
 
@@ -254,6 +254,8 @@ public class TextExtractor {
 					e.printStackTrace();
 				} catch (ExecutionException e) {
 					e.printStackTrace();
+				} catch (NullPointerException e) {
+					System.out.println("Error (cf) with page " + this.article + ".");
 				}
 			}
 			// }
@@ -262,6 +264,7 @@ public class TextExtractor {
 		this.article.setHasQuotes(hasQuotes);
 
 		if (printExampleEntity) {
+			System.out.println("EXAMPLE:");
 			printSection(currentSectionPerLevel.get(0));
 			// System.exit(0);
 		}
@@ -372,9 +375,15 @@ public class TextExtractor {
 			line.setTemplates(wikiModel.getTemplates());
 
 			for (Template t : line.getTemplates()) {
+
+				if (t.getId() == null) {
+					System.out.println("Warning: Can't read template in page " + article.getWikiquoteId());
+					continue;
+				}
+
 				processTemplate(t);
 				line.setCleanText(line.getCleanText().replace(" " + t.getId(), ""));
-				line.setCleanText(line.getCleanText().replace(t.getId(), ""));
+				line.setCleanText(line.getCleanText().replace(t.getId(), "")); // Error
 			}
 
 			if (wikiModel.getReferences() != null)
@@ -384,7 +393,8 @@ public class TextExtractor {
 
 			addFormatting(line);
 
-		} catch (IOException e) {
+		} catch (IOException | NullPointerException e) {
+			System.out.println("Error with page " + this.article.getWikiquoteId() + ".");
 			e.printStackTrace();
 		}
 
@@ -477,7 +487,9 @@ public class TextExtractor {
 			for (Template t : wikiModel.getTemplates())
 				processTemplate(t);
 
-			for (String key : template.getValues().keySet()) {
+			List<String> templateKeys=new ArrayList<String>();
+			templateKeys.addAll(template.getValues().keySet());
+			for (String key : templateKeys) {
 				String value = template.getValues().get(key);
 
 				if (wikiModel.getTemplateMap2().containsKey(value)) {
@@ -488,7 +500,8 @@ public class TextExtractor {
 			}
 
 		} catch (Exception e) {
-			System.err.println("Error during template parsing: " + e.getMessage() + ". Skip.");
+			System.err
+					.println("Error during template parsing: " + e.getStackTrace() + ". Skip page " + this.article.getWikiquoteId() + ".");
 			return false;
 		}
 
